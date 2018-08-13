@@ -8,6 +8,7 @@
 #     https://doc.scrapy.org/en/latest/topics/settings.html
 #     https://doc.scrapy.org/en/latest/topics/downloader-middleware.html
 #     https://doc.scrapy.org/en/latest/topics/spider-middleware.html
+import os
 
 BOT_NAME = 'ArticleSpider'
 
@@ -64,9 +65,19 @@ ROBOTSTXT_OBEY = False
 
 # Configure item pipelines
 # See https://doc.scrapy.org/en/latest/topics/item-pipeline.html
-#ITEM_PIPELINES = {
-#    'ArticleSpider.pipelines.ArticlespiderPipeline': 300,
-#}
+ITEM_PIPELINES = {
+   # 'ArticleSpider.pipelines.JsonExporterPipeline': 2,
+   # 'scrapy.pipelines.images.ImagesPipeline': 100,   # 自带的下载图片pipeline
+   # 'ArticleSpider.pipelines.ArticleImagePipeline': 1,  # 定义的下载图片pipeline
+   'ArticleSpider.pipelines.MysqlTwistedPipeline': 1,  # 保存到数据库的pipeline
+}
+IMAGES_URLS_FIELD = "front_image_url"   # 下载图片的url字段
+project_dir = os.path.abspath(os.path.dirname(__file__))
+IMAGES_STORE = os.path.join(project_dir, 'images')   #  图片保存路径
+# 配置下载图片最小高和宽
+# IMAGES_MIN_HEIGHT = 100
+# IMAGES_MIN_WIDTH = 100
+
 
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See https://doc.scrapy.org/en/latest/topics/autothrottle.html
@@ -88,3 +99,8 @@ ROBOTSTXT_OBEY = False
 #HTTPCACHE_DIR = 'httpcache'
 #HTTPCACHE_IGNORE_HTTP_CODES = []
 #HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
+
+
+
+MYSQL_HOST = '192.168.88.131'
+
